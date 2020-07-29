@@ -2,13 +2,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by System.getProperties()
 val policy: String by System.getProperties()
+val jcvVersion: String by System.getProperties()
 
 group = "com.compiler.server"
 version = "$kotlinVersion-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 val kotlinDependency: Configuration by configurations.creating {
-    isTransitive = false
+    isTransitive = true
 }
 val kotlinJsDependency: Configuration by configurations.creating {
     isTransitive = false
@@ -22,7 +23,7 @@ val copyDependencies by tasks.creating(Copy::class) {
     into(libJVMFolder)
 }
 val copyJSDependencies by tasks.creating(Copy::class) {
-    from(files(Callable { kotlinJsDependency.map { zipTree(it)} }))
+    from(files(Callable { kotlinJsDependency.map { zipTree(it) } }))
     into(libJSFolder)
 }
 
@@ -58,6 +59,12 @@ dependencies {
     kotlinDependency("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8")
     kotlinJsDependency("org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion")
 
+    // JCV dependencies
+    kotlinDependency("org.skyscreamer:jsonassert:1.5.0")
+    kotlinDependency("org.assertj:assertj-core:3.9.1")
+    kotlinDependency("com.ekino.oss.jcv:jcv-assertj:$jcvVersion")
+    kotlinDependency("com.ekino.oss.jcv:jcv-hamcrest:$jcvVersion")
+
     annotationProcessor("org.springframework:spring-context-indexer")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.amazonaws.serverless:aws-serverless-java-container-springboot2:1.5.1")
@@ -84,7 +91,7 @@ dependencies {
 }
 
 fun buildPropertyFile() {
-    rootDir.resolve("src/main/resources/${propertyFile}").apply{
+    rootDir.resolve("src/main/resources/${propertyFile}").apply {
         println("Generate properties into $absolutePath")
         parentFile.mkdirs()
         writeText(generateProperties())
@@ -115,7 +122,9 @@ val buildLambda by tasks.creating(Zip::class) {
     from(tasks.compileKotlin)
     from(tasks.processResources) {
         eachFile {
-            if (name == propertyFile) { file.writeText(generateProperties(lambdaWorkDirectoryPath)) }
+            if (name == propertyFile) {
+                file.writeText(generateProperties(lambdaWorkDirectoryPath))
+            }
         }
     }
     from(policy)

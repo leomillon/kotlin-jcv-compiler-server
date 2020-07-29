@@ -1,2 +1,2 @@
-rootProject.name = "kotlin-compiler-server"
+rootProject.name = "kotlin-jcv-compiler-server"
 include(":executors")
