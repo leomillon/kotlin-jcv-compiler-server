@@ -24,7 +24,10 @@ COPY --from=build /kotlin-compiler-server/executor.policy /kotlin-compiler-serve
 
 ENV PORT=8080
 
-CMD ["java", "-noverify", \
+CMD ["java", \
+    "-XX:+UnlockExperimentalVMOptions", \
+    "-XX:+UseCGroupMemoryLimitForHeap", \
+    "-noverify", \
     "-Dserver.port=${PORT}", \
     "-cp", "/kotlin-compiler-server:/kotlin-compiler-server/lib/*", \
     "com.compiler.server.CompilerApplicationKt"]

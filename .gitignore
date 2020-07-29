@@ -29,3 +29,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Kotlin dependencies ###
+*-release-*/
+
+tmp/
