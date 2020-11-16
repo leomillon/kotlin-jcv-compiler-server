@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.com/AlexanderPrendota/kotlin-compiler-server.svg?branch=master)](https://travis-ci.com/AlexanderPrendota/kotlin-compiler-server)
 ![Java CI](https://github.com/AlexanderPrendota/kotlin-compiler-server/workflows/Java%20CI/badge.svg)
 ![TC status](https://img.shields.io/teamcity/build/s/Kotlin_KotlinPlayground_KotlinCompilerServer_Build?label=TeamCity%20build) 
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.3.72-orange.svg) ](https://kotlinlang.org/) 
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.4.10-orange.svg) ](https://kotlinlang.org/) 
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/prendota/kotlin-compiler-server)
 
@@ -111,13 +111,13 @@ curl -X POST \
 
 ```shell script
 curl -X POST \
-  'http://localhost:8080/api/compiler/complete?line=1&ch=12' \
+  'http://localhost:8080/api/compiler/complete?line=2&ch=15' \
   -H 'Content-Type: application/json' \
   -d '{
   "files": [
     {
       "name": "File.kt",
-      "text": "fun main() {\n    3.0.toIn\n}"
+      "text": "fun main() {\n    val sinusoid = "sinusoid"\n    val s = sin\n}"
     }
   ]
 }'
@@ -133,7 +133,7 @@ curl -X POST \
   "files": [
     {
       "name": "File.kt",
-      "text": "fun main() {\n    println(\"Hello, world!!!\")ass\n}"
+      "text": "fun main() {\n    println(\"Hello, world!!!\")ass\n    val random = Random\n}"
     }
   ]
 }'
