@@ -10,7 +10,7 @@ version = "$kotlinVersion-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 val kotlinDependency: Configuration by configurations.creating {
-    isTransitive = true
+    isTransitive = false
 }
 val kotlinJsDependency: Configuration by configurations.creating {
     isTransitive = false
@@ -62,10 +62,18 @@ dependencies {
     kotlinJsDependency("org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion")
 
     // JCV dependencies
-    kotlinDependency("org.skyscreamer:jsonassert:1.5.0")
-    kotlinDependency("org.assertj:assertj-core:3.11.1")
-    kotlinDependency("com.ekino.oss.jcv:jcv-assertj:$jcvVersion")
-    kotlinDependency("com.ekino.oss.jcv:jcv-hamcrest:$jcvVersion")
+    kotlinDependency("org.skyscreamer:jsonassert:1.5.0") {
+        isTransitive = true
+    }
+    kotlinDependency("org.assertj:assertj-core:3.11.1") {
+        isTransitive = true
+    }
+    kotlinDependency("com.ekino.oss.jcv:jcv-assertj:$jcvVersion") {
+        isTransitive = true
+    }
+    kotlinDependency("com.ekino.oss.jcv:jcv-hamcrest:$jcvVersion") {
+        isTransitive = true
+    }
 
     annotationProcessor("org.springframework:spring-context-indexer")
     implementation("org.springframework.boot:spring-boot-starter-web")

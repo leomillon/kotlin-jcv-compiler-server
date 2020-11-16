@@ -88,17 +88,23 @@ private fun getVariantsForZip(classLoader: URLClassLoader, file: File): List<Imp
   JarFile(file).entries().toList()
     .filter { !it.isDirectory && it.name.endsWith(CLASS_EXTENSION) }
     .flatMap {
-      val name = it.name.removeSuffix(CLASS_EXTENSION)
-      val fullName = name.replace(File.separator, ".")
-      if (fullName.split(".").last() == MODULE_INFO_NAME) return@flatMap emptyList<ImportInfo>()
-      val clazz = runCatching { classLoader.loadClass(fullName) }.getOrNull() ?: return@flatMap emptyList<ImportInfo>()
-      val classes = if (clazz.isKotlinClass()) {
-        allClassesFromKotlinClass(clazz)
-      } else {
-        allClassesFromJavaClass(clazz)
+      try {
+        val name = it.name.removeSuffix(CLASS_EXTENSION)
+        val fullName = name.replace(File.separator, ".")
+        if (fullName.split(".").last() == MODULE_INFO_NAME) return@flatMap emptyList<ImportInfo>()
+        val clazz = runCatching { classLoader.loadClass(fullName) }.getOrNull() ?: return@flatMap emptyList<ImportInfo>()
+        val classes = if (clazz.isKotlinClass()) {
+          allClassesFromKotlinClass(clazz)
+        } else {
+          allClassesFromJavaClass(clazz)
+        }
+        val functions = allFunctionsFromClass(clazz)
+        classes + functions
+      } catch (e: Error) {
+        System.err.println("An error occurred on ${it.name}, skipping...")
+        e.printStackTrace(System.err)
+        return@flatMap emptyList()
       }
-      val functions = allFunctionsFromClass(clazz)
-      classes + functions
     }.distinct()
 
 private fun allFunctionsFromClass(clazz: Class<*>): List<ImportInfo> =
