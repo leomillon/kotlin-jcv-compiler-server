@@ -63,7 +63,7 @@ dependencies {
 
     // JCV dependencies
     kotlinDependency("org.skyscreamer:jsonassert:1.5.0")
-    kotlinDependency("org.assertj:assertj-core:3.9.1")
+    kotlinDependency("org.assertj:assertj-core:3.11.1")
     kotlinDependency("com.ekino.oss.jcv:jcv-assertj:$jcvVersion")
     kotlinDependency("com.ekino.oss.jcv:jcv-hamcrest:$jcvVersion")
 
